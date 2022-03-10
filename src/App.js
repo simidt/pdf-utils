@@ -13,23 +13,33 @@ function App() {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className="flex min-w-1/5 bg-gray-100 p-8 h-screen">
-        <div className="ml-4 flex-col justify-center">
-          <Dropzone onDrop={handleDrop}>
+      <div className="flex flex-row bg-gray-100 p-8 h-screen">
+        <div className="ml-4 flex-col min-w-[20%] border-dashed border-4 mt-8">
+          <Dropzone onDrop={handleDrop} className="h-full">
             {({ getRootProps, getInputProps }) => (
-              <section>
-                <div {...getRootProps()}>
+              <section className="h-full">
+                <div {...getRootProps()} className=" h-full">
                   <input {...getInputProps()} />
-                  <p>Drag 'n' drop some files here, or click to select files</p>
+                  {files.length === 0 ? (
+                    <p className="h-full flex flex-col justify-center opacity-50">
+                      Drag 'n' drop some files here, or click to select files
+                    </p>
+                  ) : (
+                    <div className="flex-col overflow-auto flex-1 max-h-[65%]">
+                      {files.map((file, idx) => (
+                        <PDFDisplay
+                          key={file.path}
+                          file={file}
+                          index={idx}
+                        ></PDFDisplay>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </section>
             )}
           </Dropzone>
-          <div className="flex-col overflow-auto flex-1 max-h-[65%]">
-            {files.map((file, idx) => (
-              <PDFDisplay key={file.path} file={file}></PDFDisplay>
-            ))}
-          </div>
+
           {files.length === 0 ? (
             <></>
           ) : (
