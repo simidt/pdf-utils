@@ -17,7 +17,7 @@ const MergeControl = ({files}) => {
     }
     return(
    
-        <button className="h-12 mt-8 w-1/3" onClick={mergeAndShow}>Merge PDFs</button>
+        <button className="h-12 mt-8" onClick={mergeAndShow}>Merge PDFs</button>
 )
 }
 
