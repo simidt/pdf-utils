@@ -4,13 +4,13 @@ import {useDrop} from "react-dnd"
 import { NativeTypes } from "react-dnd-html5-backend";
 
 const PDFList = ({ files, movePDF, handleDrop }) => {
-    const [{canDrop, isOver }, dropRef] = useDrop(() => ({
+    const [, dropRef] = useDrop(() => ({
         accept: ['PDFDisplay', NativeTypes.FILE],
         drop(item) {
             handleDrop(item.files)
             
         },
-        canDrop(item) {
+        canDrop() {
             return true;
         },
         collect: (monitor) => {

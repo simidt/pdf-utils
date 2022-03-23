@@ -1,9 +1,8 @@
-import { React, useState, useRef } from "react";
+import { React, useRef } from "react";
 import { useDrag, useDrop } from 'react-dnd'
 
 const PDFDisplay = ({ file, handleClick, index, movePDF }) => {
     const ref = useRef(null);
-    const [isBeingEdited, setIsBeingEdited] = useState(false)
     // Add previews to this
     const [{ isDragging }, dragRef] = useDrag({
         type: 'PDFDisplay',
@@ -13,7 +12,7 @@ const PDFDisplay = ({ file, handleClick, index, movePDF }) => {
         })
     })
     
-    const [{ isOver }, dropRef] = useDrop({
+    const [, dropRef] = useDrop({
         accept: 'PDFDisplay',
         collect:(monitor) => {
             return {
