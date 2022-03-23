@@ -31,10 +31,18 @@ function App() {
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="flex flex-row bg-gray-100 p-8 h-screen justify-center">
-        <div className="ml-4 flex-col min-w-[20%] border-dashed border-4 mt-8">
-          <div className="flex-col flex-1 h-full">
+        <div className="ml-4 flex-col min-w-[20%] h-full">
+          <div>
+            Drag and drop your files into the box below. You may reorder the
+            files by dragging them to a new position.
+            <p>
+              Clicking on "Merge PDFs" will concatenate the PDFs and show the
+              result.
+            </p>
+            <p>All computations run locally. No file leaves your machine.</p>
+          </div>
+          <div className="flex-col flex-1 min-h-[20%] border-dashed border-4 mt-8">
             <PDFList
-              className="w-1/5"
               files={files}
               movePDF={movePDF}
               handleDrop={handleDrop}

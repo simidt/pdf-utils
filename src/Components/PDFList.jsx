@@ -29,9 +29,10 @@ const PDFList = ({ files, movePDF, handleDrop }) => {
 
     return (
         <div ref={dropRef} className="h-full">
-            <div className=" flex  mr-4 mt-2" >
-                <div className=" flex flex-col w-full " >
-                        {files.map((pdf, index) => renderPDF(pdf, index))}
+            <div className=" flex  mr-4 mt-2 h-full" >
+                <div className=" flex flex-col w-full h-full " >
+                    {files.length > 0 ? files.map((pdf, index) => renderPDF(pdf, index)) :
+                        (<div className=" flex-col flex justify-center items-center h-full opacity-50">Drag and drop files here</div>)}
 
                 </div>
             </div>
