@@ -1,41 +1,41 @@
-import { React, useState } from "react";
+import { React} from "react";
 import PDFDisplay from "./PDFDisplay";
 import {useDrop} from "react-dnd"
-import MergeControl from "./MergeControl";
+import { NativeTypes } from "react-dnd-html5-backend";
 
-// files will be used for a "move all" button
-const PDFList = ({ files }) => {
-    const [selectedPDFs, setSelectedPDFs] = useState([])
-    const [editingFile, setEditingFile] = useState("")
-    const [{ isOver }, dropRef] = useDrop({
-        accept: 'PDFDisplay',
-        drop: (item) => {
-            console.log(item)
-            setSelectedPDFs((selectedPDFs) =>
-                !selectedPDFs.includes(item) ? [...selectedPDFs, item] : selectedPDFs)
+const PDFList = ({ files, movePDF, handleDrop }) => {
+    const [{canDrop, isOver }, dropRef] = useDrop(() => ({
+        accept: ['PDFDisplay', NativeTypes.FILE],
+        drop(item) {
+            handleDrop(item.files)
+            
         },
-        collect: (monitor) => ({
-            isOver: monitor.isOver()
-        })
-    })
+        canDrop(item) {
+            return true;
+        },
+        collect: (monitor) => {
+            return {
+                isOver: monitor.isOver(),
+                canDrop: monitor.canDrop()
+            }
+        
+        }
+    }), [handleDrop])
 
-    const handleClick = (file) => {
-        setEditingFile(file.path);
-    }
+    const renderPDF = ( file, index ) => {
+        if(file)
+        return (<PDFDisplay key={file.path} file={file} index={index} movePDF={movePDF}></PDFDisplay>)
+    };
+
     return (
-        <>
-        <div className=" flex ml-6  mt-6  min-w-[20%]">
-            <div className=" flex flex-col overflow-auto w-full ml-6 min-h-[65%] max-h-[67.25%] " ref={dropRef}>
-                <div className="flex-1 h-full m-2 border-2 rounded-md ">
-                        {selectedPDFs.map(pdf => <PDFDisplay key={pdf.path} file={pdf} handleClick={handleClick}></PDFDisplay>)}
-                    </div>
-                    <MergeControl  files={selectedPDFs}></MergeControl>
+        <div ref={dropRef} className="h-full">
+            <div className=" flex  mr-4 mt-2" >
+                <div className=" flex flex-col w-full " >
+                        {files.map((pdf, index) => renderPDF(pdf, index))}
 
+                </div>
             </div>
-
-            </div>
-            <div>Currently editing file {editingFile}</div>
-            </>
+        </div>
     )
 }
 

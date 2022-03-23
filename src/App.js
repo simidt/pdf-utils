@@ -1,44 +1,49 @@
-import Dropzone from "react-dropzone";
-import { useState } from "react";
-import PDFDisplay from "./Components/PDFDisplay";
+import { useCallback, useState } from "react";
 import PDFList from "./Components/PDFList";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import MergeControl from "./Components/MergeControl";
 function App() {
   const [files, setFiles] = useState([]);
 
-  const handleDrop = (droppedFile) => {
-    setFiles(files.concat(droppedFile));
+  const handleDrop = (newFiles) => {
+    setFiles(() => {
+      if (!newFiles) {
+        return files;
+      }
+      // Keep only the files that are not already present
+      const filteredNewFiles = newFiles.filter((f) => !files.includes(f));
+      return filteredNewFiles.length > 0
+        ? files.concat(filteredNewFiles)
+        : files;
+    });
   };
+
+  const movePDF = useCallback((dragIndex, hoverIndex) => {
+    setFiles((prevPDFs) => {
+      const newPDFs = [...prevPDFs];
+      const dragged = newPDFs.splice(dragIndex, 1)[0];
+      newPDFs.splice(hoverIndex, 0, dragged);
+      return newPDFs;
+    });
+  }, []);
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className="flex min-w-1/5 bg-gray-100 p-8 h-screen">
-        <div className="ml-4 flex-col justify-center">
-          <Dropzone onDrop={handleDrop}>
-            {({ getRootProps, getInputProps }) => (
-              <section>
-                <div {...getRootProps()}>
-                  <input {...getInputProps()} />
-                  <p>Drag 'n' drop some files here, or click to select files</p>
-                </div>
-              </section>
-            )}
-          </Dropzone>
-          <div className="flex-col overflow-auto flex-1 max-h-[65%]">
-            {files.map((file, idx) => (
-              <PDFDisplay key={file.path} file={file}></PDFDisplay>
-            ))}
+      <div className="flex flex-row bg-gray-100 p-8 h-screen justify-center">
+        <div className="ml-4 flex-col min-w-[20%] border-dashed border-4 mt-8">
+          <div className="flex-col flex-1 h-full">
+            <PDFList
+              className="w-1/5"
+              files={files}
+              movePDF={movePDF}
+              handleDrop={handleDrop}
+            ></PDFList>
           </div>
-          {files.length === 0 ? (
-            <></>
-          ) : (
-            <div className="mt-6">
-              <button className="ml-4">Extract pages</button>
-            </div>
-          )}
         </div>
-        <PDFList className="w-1/5"></PDFList>
+        <div className="flex-col flex  justify-center fit-content ml-4">
+          <MergeControl files={files}></MergeControl>
+        </div>
       </div>
     </DndProvider>
   );
