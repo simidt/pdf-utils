@@ -1,5 +1,6 @@
 {
   "name": "pdf-utils",
+  "homepage": "https://simidt.github.io/pdf-utils",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
