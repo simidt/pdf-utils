@@ -41,7 +41,7 @@ function App() {
             </p>
             <p>All computations run locally. No file leaves your machine.</p>
           </div>
-          <div className="flex-col flex-1 min-h-[20%] border-dashed border-4 mt-8">
+          <div className="flex-col flex-1 min-h-fit h-1/3 border-dashed border-4 mt-8">
             <PDFList
               files={files}
               movePDF={movePDF}
